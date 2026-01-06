@@ -15,11 +15,12 @@
 ## Features
 
 - **Sync notes** from your self-hosted Flatnotes server with JWT authentication
+- **Quick notes** - enter up to 3 notes directly in Garmin Connect settings (no server needed)
 - **View markdown** with smooth pixel-based scrolling optimized for circular displays
-- **Toggle checkboxes** - tap to check/uncheck tasks, changes sync back to server
+- **Toggle checkboxes** - tap to check/uncheck tasks, changes saved on watch (optionally sync back to server)
 - **Multiple font sizes** - Medium, Small, or Tiny to fit more content
 - **Sort notes** by title or last modified date
-- **Demo mode** - try the app with the public demo.flatnotes.io server (no setup required)
+- **Demo mode** - works out of the box with demo.flatnotes.io (no configuration needed)
 
 ## Supported Devices
 
@@ -37,27 +38,43 @@ Requires **API Level 3.4.0+** and a phone with Garmin Connect Mobile.
 
 ## Quick Start
 
-### Try Demo Mode (No Setup)
+### Demo Mode (No Setup)
+
+WristDown works out of the box! The default server URL points to demo.flatnotes.io, so you can:
 
 1. Install WristDown from the Connect IQ Store
 2. Open the app on your watch
-3. Select **Demo** from the menu
-4. Browse sample notes from demo.flatnotes.io
+3. Select **Sync** - sample notes will be downloaded from the demo server
+
+To use your own server, simply change the server URL in Garmin Connect settings.
+
+### Quick Notes (No Server)
+
+You can enter up to 3 notes directly in the app settings - no server required:
+
+1. Open **Garmin Connect** app on your phone
+2. Go to **Devices** → Your watch → **Activities & Apps** → **Apps**
+3. Find **WristDown** → **Settings**
+4. Enter your notes in the **Note 1**, **Note 2**, **Note 3** fields (supports markdown)
+5. Open WristDown on your watch - your notes appear at the top of the list
+
+Quick notes are stored locally on the watch and appear before any synced notes.
 
 ### Use Your Own Server
 
 1. Set up a [Flatnotes](https://github.com/dullage/flatnotes) server
-2. Configure the server for WristDown compatibility ([setup guide](docs/setup.md))
-3. In the Garmin Connect Mobile app, go to WristDown settings
-4. Enter your server URL, username, and password
-5. Open WristDown on your watch and select **Sync**
+2. In the Garmin Connect Mobile app, go to WristDown settings
+3. Enter your server URL, username, and password
+4. Open WristDown on your watch and select **Sync**
+
+See the [setup guide](docs/setup.md) for detailed configuration including optional checkbox sync-back.
 
 ## Server Requirements
 
 WristDown connects to [Flatnotes](https://github.com/dullage/flatnotes), a self-hosted note-taking app. You'll need:
 
 - A running Flatnotes instance accessible over HTTPS
-- A reverse proxy (nginx) configured to handle the PUT→PATCH workaround
+- (Optional) A reverse proxy configured to rewrite PUT→PATCH for checkbox sync-back
 
 See the [detailed setup guide](docs/setup.md) for configuration instructions.
 

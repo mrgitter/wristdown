@@ -6,7 +6,7 @@ WristDown syncs notes from a [Flatnotes](https://github.com/dullage/flatnotes) s
 
 - A running Flatnotes instance
 - HTTPS enabled (required for Garmin Connect IQ)
-- A reverse proxy (nginx recommended)
+- A reverse proxy (nginx recommended, or any proxy that supports HTTPS)
 
 ## Flatnotes Installation
 
@@ -23,11 +23,11 @@ docker run -d \
   dullage/flatnotes:latest
 ```
 
-## Critical: PUT to PATCH Workaround
+## Optional: PUT to PATCH Rewrite (for Checkbox Sync-Back)
 
-**This step is required for checkbox sync-back to work.**
+**This step is optional.** Without it, checkbox changes are saved locally on your watch but won't sync back to the server.
 
-Garmin Connect IQ does not support the HTTP PATCH method. Flatnotes uses PATCH for updating notes. To work around this, configure your reverse proxy to rewrite PUT requests to PATCH.
+If you want checkbox changes to sync back to your Flatnotes server, you need to configure your reverse proxy to rewrite PUT requests to PATCH. This is necessary because Garmin Connect IQ does not support the HTTP PATCH method, which Flatnotes uses for updates.
 
 ### nginx Configuration
 
@@ -40,7 +40,7 @@ server {
     ssl_certificate_key /path/to/key.pem;
 
     location /api/notes/ {
-        # Rewrite PUT to PATCH for Flatnotes compatibility with Garmin
+        # Rewrite PUT to PATCH for checkbox sync-back to Flatnotes
         if ($request_method = PUT) {
             proxy_method PATCH;
         }
@@ -76,7 +76,7 @@ notes.yourdomain.com {
 }
 ```
 
-Note: Caddy's method rewriting requires additional configuration. nginx is recommended for full compatibility.
+Note: Caddy's method rewriting requires additional configuration. nginx is recommended for checkbox sync-back.
 
 ## Garmin Connect Mobile Settings
 
@@ -108,9 +108,9 @@ WristDown uses JWT (JSON Web Token) authentication:
 | `/api/token` | POST | Authenticate and get JWT token |
 | `/api/search` | GET | List available notes |
 | `/api/notes/{title}` | GET | Fetch note content |
-| `/api/notes/{title}` | PUT* | Update note (checkbox changes) |
+| `/api/notes/{title}` | PUT | Update note (checkbox changes)* |
 
-*PUT is rewritten to PATCH by the reverse proxy
+*Requires PUT→PATCH rewrite in reverse proxy (see above)
 
 ## Troubleshooting
 
@@ -121,9 +121,13 @@ WristDown uses JWT (JSON Web Token) authentication:
 - Ensure SSL certificate is valid (not self-signed)
 - Confirm your phone has internet connectivity
 
-### Notes Sync but Checkboxes Don't Save
+### Checkbox Changes Don't Sync to Server
 
-- Verify the PUT→PATCH rewrite is configured in your reverse proxy
+If checkboxes toggle correctly on the watch but changes don't appear on your server:
+
+- This is expected if you haven't configured the PUT→PATCH rewrite (see above)
+- Without the rewrite, checkbox states are saved locally on the watch only
+- To enable sync-back, configure your reverse proxy to rewrite PUT to PATCH
 - Check nginx/proxy logs for 405 Method Not Allowed errors
 - Test manually: `curl -X PUT https://notes.yourdomain.com/api/notes/test`
 
