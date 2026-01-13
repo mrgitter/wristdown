@@ -3,7 +3,7 @@
 **Markdown notes on your Garmin watch** - Sync notes from your self-hosted [Flatnotes](https://github.com/dullage/flatnotes) server, view them with smooth scrolling, and toggle checkboxes right from your wrist.
 
 <!-- Connect IQ Store Badge - Update URL after publishing -->
-[<img src="https://developer.garmin.com/static/available-badge-9e49ebfb7336ce47f8df66dfe45d28ae.svg" width="200">](https://apps.garmin.com/apps/YOUR_APP_ID)
+[<img src="https://developer.garmin.com/static/available-badge-9e49ebfb7336ce47f8df66dfe45d28ae.svg" width="200">](https://apps.garmin.com/en-US/apps/7d7054d3-0907-4f3a-a39b-c135830bd6ba)
 
 ## Screenshots
 
@@ -113,7 +113,7 @@ Notes are pre-rendered when downloaded. After that, notes of any size open and s
 - [Setup Guide](docs/setup.md) - Server configuration instructions
 - [Markdown Reference](docs/markdown.md) - Supported syntax
 - [Flatnotes](https://github.com/dullage/flatnotes) - The note server WristDown connects to
-- [Connect IQ Store](#) - *Link coming soon*
+- [Connect IQ Store](https://apps.garmin.com/en-US/apps/7d7054d3-0907-4f3a-a39b-c135830bd6ba)
 
 ## Feedback
 
