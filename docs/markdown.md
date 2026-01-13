@@ -1,25 +1,28 @@
 # Markdown Reference
 
-WristDown renders markdown notes on your Garmin watch. This document covers supported syntax and the interactive checkbox feature.
+WristDown renders markdown notes on your Garmin watch. Since Garmin watches don't support bold/italic fonts, formatting is displayed using colors and visual styles.
 
 ## Supported Syntax
 
-| Feature | Syntax | Example |
-|---------|--------|---------|
-| **Bold** | `**text**` or `__text__` | **important** |
-| *Italic* | `*text*` or `_text_` | *emphasis* |
-| Headers | `#`, `##`, `###` | Rendered larger |
-| ~~Strikethrough~~ | `~~text~~` | ~~done~~ |
-| `Inline code` | `` `code` `` | `variable` |
-| Checkbox (unchecked) | `[ ]` | Interactive |
-| Checkbox (checked) | `[x]` or `[X]` | Interactive |
-| Unordered list | `- item` | Bullet point |
-| Ordered list | `1. item` | Numbered |
-| Horizontal rule | `---` | Separator line |
+| Syntax | How it's displayed |
+|--------|-------------------|
+| `**bold**` or `__bold__` | Yellow text |
+| `*italic*` or `_italic_` | Light gray text |
+| `**_bold italic_**` | Orange text |
+| `# Header 1` | White text with underline |
+| `## Header 2` | Light gray text with underline |
+| `### Header 3` | Light gray text with underline |
+| `` `code` `` | Cyan text |
+| `~~strikethrough~~` | Dark gray text |
+| `[ ]` | Interactive checkbox (unchecked) |
+| `[x]` or `[X]` | Interactive checkbox (checked) |
+| `- item` | Bullet point |
+| `1. item` | Numbered list |
+| `---` | Horizontal line |
 
 ## Interactive Checkboxes
 
-The checkbox feature is what makes WristDown unique for task management on your watch.
+The checkbox feature is what makes WristDown useful for task management on your watch.
 
 ### How It Works
 
@@ -27,7 +30,7 @@ The checkbox feature is what makes WristDown unique for task management on your 
 2. **Navigate** - Use the up/down buttons to move focus between checkboxes
 3. **Toggle** - Press select/tap to toggle the focused checkbox
 4. **Auto-save** - Changes are saved locally immediately
-5. **Sync back** - When you exit the note, changes sync to your Flatnotes server
+5. **Sync back** - When you exit the note, changes can sync to your Flatnotes server (if configured)
 
 ### Example Task List
 
@@ -50,17 +53,17 @@ The checkbox feature is what makes WristDown unique for task management on your 
 
 - Checkboxes must be at the start of a line (after the list marker if using lists)
 - Both `[x]` and `[X]` are recognized as checked
-- Changes sync when you exit the note view, not immediately on toggle
-- If sync fails, changes remain saved locally until next successful sync
+- Changes are saved locally on the watch immediately
+- Server sync-back requires PUT→PATCH proxy configuration (see [setup guide](setup.md))
 
 ## Headers
 
-Headers are rendered in larger text to provide visual hierarchy:
+Headers are rendered with underlines to provide visual hierarchy:
 
 ```markdown
-# Large Header
-## Medium Header
-### Small Header
+# Main Header
+## Section Header
+### Subsection Header
 ```
 
 All three header levels are supported. Headers help organize longer notes.
@@ -73,7 +76,7 @@ You can combine formatting in a single line:
 This is **bold** and *italic* text with `code`.
 ```
 
-Nested formatting (bold italic) is not currently supported.
+Bold italic (`**_text_**`) is also supported and displays in orange.
 
 ## Lists
 
@@ -131,8 +134,8 @@ The following markdown features are not currently rendered:
 
 ## Tips for Watch-Friendly Notes
 
-1. **Keep notes concise** - Large notes may be slow to load
-2. **Use headers** - They help navigate longer content
+1. **Keep notes concise** - Large notes take longer to process
+2. **Use headers** - They help organize longer content
 3. **Use checkboxes** - Interactive and useful for quick tasks
 4. **Short lines** - Circular displays have limited width
-5. **Avoid complex formatting** - Simple markdown works best
+5. **Simple formatting** - Basic markdown works best on small screens

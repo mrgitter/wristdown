@@ -18,21 +18,19 @@
 - **Quick notes** - enter up to 3 notes directly in Garmin Connect settings (no server needed)
 - **View markdown** with smooth pixel-based scrolling optimized for circular displays
 - **Toggle checkboxes** - tap to check/uncheck tasks, changes saved on watch (optionally sync back to server)
+- **Note filtering** - set a keyword filter to sync only specific notes (e.g., notes with "watch" in title)
 - **Multiple font sizes** - Medium, Small, or Tiny to fit more content
 - **Sort notes** by title or last modified date
 - **Demo mode** - works out of the box with demo.flatnotes.io (no configuration needed)
 
 ## Supported Devices
 
-Works on **57+ Garmin watches** including:
+Works on **50+ Garmin watches** including:
 - Fenix 6/7/8 series
 - Epix (Gen 2) / Epix Pro
 - Forerunner 165/255/265/955/965/970
-- Venu 2/3/4 series
-- Instinct 3 AMOLED
-- MARQ (Gen 2) series
-- Descent Mk3 series
-- ...and many more
+- Venu series
+- ...and more
 
 Requires **API Level 3.4.0+** and a phone with Garmin Connect Mobile.
 
@@ -44,7 +42,7 @@ WristDown works out of the box! The default server URL points to demo.flatnotes.
 
 1. Install WristDown from the Connect IQ Store
 2. Open the app on your watch
-3. Select **Sync** - sample notes will be downloaded from the demo server
+3. Select **Sync** - sample notes will be downloaded from the Flatnotes demo server
 
 To use your own server, simply change the server URL in Garmin Connect settings.
 
@@ -58,7 +56,7 @@ You can enter up to 3 notes directly in the app settings - no server required:
 4. Enter your notes in the **Note 1**, **Note 2**, **Note 3** fields (supports markdown)
 5. Open WristDown on your watch - your notes appear at the top of the list
 
-Quick notes are stored locally on the watch and appear before any synced notes.
+Quick notes are stored only locally on the watch and appear before any synced notes.
 
 ### Use Your Own Server
 
@@ -80,24 +78,30 @@ See the [detailed setup guide](docs/setup.md) for configuration instructions.
 
 ## Markdown Support
 
-WristDown renders common markdown syntax on your watch:
+WristDown renders common markdown syntax using colors (Garmin watches don't support bold/italic fonts):
 
-| Feature | Syntax |
-|---------|--------|
-| **Bold** | `**text**` or `__text__` |
-| *Italic* | `*text*` or `_text_` |
-| Headers | `#`, `##`, `###` |
-| ~~Strikethrough~~ | `~~text~~` |
-| `Inline code` | `` `code` `` |
-| Checkboxes | `[ ]` unchecked, `[x]` checked |
-| Lists | `- item` or `1. item` |
-| Horizontal rule | `---` |
+| Syntax | Display |
+|--------|---------|
+| `**bold**` | Yellow text |
+| `*italic*` | Light gray text |
+| `# ## ###` | Headers with underline |
+| `` `code` `` | Cyan text |
+| `~~strike~~` | Dark gray text |
+| `[ ]` `[x]` | Interactive checkboxes |
+| `- item` | Bullet lists |
+| `---` | Horizontal line |
 
 See the [full markdown reference](docs/markdown.md) for details.
 
+## Performance
+
+Notes are pre-rendered when downloaded. After that, notes of any size open and scroll instantly with no lag. The app supports longer notes (tested with ~5 A4-page texts), though initial processing takes longer for large notes.
+
 ## Languages
 
-The app interface is available in 22 languages with full translations for English and Lithuanian. Other languages fall back to English.
+**App interface:** Available in English.
+
+**Note content:** Latin-based languages (English, French, German, Spanish, etc.) display correctly. Arabic and RTL languages are not supported. CJK languages have not been tested.
 
 ## Links
 
