@@ -98,6 +98,22 @@ WristDown renders common markdown syntax using colors (Garmin watches don't supp
 
 See the [full markdown reference](docs/markdown.md) for details.
 
+## PIN Protection
+
+Protect individual notes with a 3-5 digit PIN configured in Garmin Connect app settings (Security → App PIN).
+
+**Accessing note options to toggle protection:**
+- **Touchscreen:** Swipe left while viewing a note
+- **Button watches:** Hold MENU button (UP on Fenix/Forerunner) while viewing a note
+
+Select "Protect with PIN" or "Remove Protection" from the menu.
+
+## Disabling Server Sync
+
+To use only Quick Notes without server sync, clear the Flatnotes URL in Garmin Connect app settings. On the next sync, previously synced server notes will be deleted and only your manual Quick Notes will remain.
+
+Useful if you tried the demo server and now want to use only Quick Notes.
+
 ## Performance
 
 Notes are pre-rendered when downloaded. After that, notes of any size open and scroll instantly with no lag. The app supports longer notes (tested with ~5 A4-page texts), though initial processing takes longer for large notes.
