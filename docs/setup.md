@@ -67,16 +67,14 @@ notes.yourdomain.com {
     }
 
     handle @put_notes {
-        # Caddy doesn't have built-in method rewriting
-        # You may need a plugin or alternative approach
-        reverse_proxy localhost:8080
+        reverse_proxy {
+            to localhost:8080
+            method PATCH
+        }
     }
-
     reverse_proxy localhost:8080
 }
 ```
-
-Note: Caddy's method rewriting requires additional configuration. nginx is recommended for checkbox sync-back.
 
 ## Garmin Connect Mobile Settings
 
