@@ -1,158 +1,80 @@
-# Server Setup Guide
+# Setup Guide
 
-WristDown syncs notes from a [Flatnotes](https://github.com/dullage/flatnotes) server. This guide covers how to set up your server for WristDown compatibility.
+WristDown 2.0 has three ways to get notes onto the watch:
 
-## Prerequisites
+- **GitHub** - recommended; sync Markdown files from a repository, no server needed.
+- **Flatnotes** - still supported if you already run a Flatnotes server.
+- **Quick Notes** - up to 3 notes typed directly into Garmin Connect settings.
 
-- A running Flatnotes instance
-- HTTPS enabled (required for Garmin Connect IQ)
-- A reverse proxy (nginx recommended, or any proxy that supports HTTPS)
+## Recommended: GitHub
 
-## Flatnotes Installation
+GitHub is the main source in 2.0. It works well with a small notes repository, a folder inside a bigger repository, or an Obsidian vault synced with Git.
 
-Follow the [official Flatnotes documentation](https://github.com/dullage/flatnotes) to set up your server. The quickest method is Docker:
+Use GitHub if you want:
 
-```bash
-docker run -d \
-  -p 8080:8080 \
-  -e FLATNOTES_AUTH_TYPE=password \
-  -e FLATNOTES_USERNAME=your_username \
-  -e FLATNOTES_PASSWORD=your_password \
-  -e FLATNOTES_SECRET_KEY=your_secret_key \
-  -v /path/to/notes:/data \
-  dullage/flatnotes:latest
-```
+- no server to host,
+- `.md` and `.txt` notes from a repository,
+- checkbox and recurring-task changes synced back from the watch,
+- timed task and event reminders (these work only with GitHub),
+- an Obsidian-friendly workflow.
 
-## Optional: PUT to PATCH Rewrite (for Checkbox Sync-Back)
+The [GitHub setup guide](github.md) covers the repository, token creation, Garmin Connect settings, Obsidian notes, and troubleshooting.
 
-**This step is optional.** Without it, checkbox changes are saved locally on your watch but won't sync back to the server.
+## Flatnotes
 
-If you want checkbox changes to sync back to your Flatnotes server, you need to configure your reverse proxy to rewrite PUT requests to PATCH. This is necessary because Garmin Connect IQ does not support the HTTP PATCH method, which Flatnotes uses for updates.
+Flatnotes was the original sync source and still works for notes and checkboxes. Task and event reminders are not supported with Flatnotes; they need GitHub as the source.
 
-### nginx Configuration
+If you already run a server, see the [Flatnotes setup guide](flatnotes.md) for the prerequisites, Garmin Connect settings, the optional checkbox sync-back proxy rewrite, and troubleshooting.
 
-```nginx
-server {
-    listen 443 ssl;
-    server_name notes.yourdomain.com;
+## Quick Notes
 
-    ssl_certificate /path/to/cert.pem;
-    ssl_certificate_key /path/to/key.pem;
+Quick Notes are edited directly in Garmin Connect:
 
-    location /api/notes/ {
-        # Rewrite PUT to PATCH for checkbox sync-back to Flatnotes
-        if ($request_method = PUT) {
-            proxy_method PATCH;
-        }
-        proxy_pass http://localhost:8080;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
+1. Open **Garmin Connect**.
+2. Go to **Devices -> Your watch -> Activities & Apps -> Apps**.
+3. Select **WristDown -> Settings**.
+4. Fill **Note 1**, **Note 2**, or **Note 3**.
+5. Open WristDown on the watch.
 
-    location / {
-        proxy_pass http://localhost:8080;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
-```
+They appear at the top of the note list. Handy for short static notes, but they don't sync to GitHub or Flatnotes.
 
-### Caddy Configuration
+## Source priority
 
-```caddyfile
-notes.yourdomain.com {
-    @put_notes {
-        method PUT
-        path /api/notes/*
-    }
+If the GitHub repository and token settings are filled in, WristDown syncs from GitHub. Otherwise it falls back to the Flatnotes settings.
 
-    handle @put_notes {
-        reverse_proxy {
-            to localhost:8080
-            method PATCH
-        }
-    }
-    reverse_proxy localhost:8080
-}
-```
+Quick Notes are separate from all of that and work alongside either source.
 
-## Garmin Connect Mobile Settings
+## Note filtering
 
-After installing WristDown from the Connect IQ Store:
+The **Note Keyword Filter** setting limits which notes get synced, by title or filename.
 
-1. Open the **Garmin Connect** app on your phone
-2. Go to **Devices** → Select your watch → **Activities & Apps** → **Apps**
-3. Find **WristDown** and tap **Settings**
-4. Enter:
-   - **Server URL**: `https://notes.yourdomain.com` (include https://)
-   - **Username**: Your Flatnotes username
-   - **Password**: Your Flatnotes password
+- GitHub: filters by filename.
+- Flatnotes: filters through Flatnotes search.
+- Quick Notes: not affected.
 
-Settings sync to your watch automatically when connected via Bluetooth.
+Leave it empty to sync everything.
 
-## Authentication
+For GitHub, a small dedicated folder beats filtering a big one, because the watch may still have to receive the full file list of the folder before the filter can narrow it down.
 
-WristDown uses JWT (JSON Web Token) authentication:
+## General troubleshooting
 
-1. On first sync, WristDown requests a token from `/api/token`
-2. The token is stored on the watch
-3. All subsequent requests include the token in the Authorization header
-4. Tokens are refreshed automatically when needed
+### Large or numerous notes fail to load
 
-## API Endpoints Used
+Watches don't have much memory. Big notes take longer to process or get skipped, and too many notes can make sync fail outright, especially with GitHub, where the first response for a folder lists every file in it.
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/api/token` | POST | Authenticate and get JWT token |
-| `/api/search` | GET | List available notes |
-| `/api/notes/{title}` | GET | Fetch note content |
-| `/api/notes/{title}` | PUT | Update note (checkbox changes)* |
+Recommended limits: keep notes short, keep individual GitHub files under 15 KB, and keep the watch folder to about 10 notes (don't go past 15). Flatnotes isn't hit by the folder-listing issue in the same way, but small, focused notes are still the way to go.
 
-*Requires PUT→PATCH rewrite in reverse proxy (see above)
+### Too many reminders
 
-## Troubleshooting
+Reminder count matters too. During sync, WristDown precomputes everything the reminder list, glance, notifications, and background scheduler need, and the background updates that mark reminders due have to run inside Garmin's strict background CPU and memory limits. So a big reminder set can look fine in the foreground and then quietly fail in the background.
 
-### "Connection Error" on Sync
+> Higher counts may work on some watches, but for reliable daily use keep active reminders to about 20 or fewer.
 
-- Verify your server URL is correct and includes `https://`
-- Check that your server is accessible from the internet
-- Ensure SSL certificate is valid (not self-signed)
-- Confirm your phone has internet connectivity
+Fenix 6 Pro family, Forerunner 945 LTE, and MARQ Gen 1 watches run a reduced reminder build: notes and in-note task/reminder dates still work, but there's no reminder list, notifications, background processing, or glance summary. The full model list is in the [README](../README.md#reminders-on-older-watches).
 
-### Checkbox Changes Don't Sync to Server
+## Security notes
 
-If checkboxes toggle correctly on the watch but changes don't appear on your server:
-
-- This is expected if you haven't configured the PUT→PATCH rewrite (see above)
-- Without the rewrite, checkbox states are saved locally on the watch only
-- To enable sync-back, configure your reverse proxy to rewrite PUT to PATCH
-- Check nginx/proxy logs for 405 Method Not Allowed errors
-- Test manually: `curl -X PUT https://notes.yourdomain.com/api/notes/test`
-
-### "Authentication Failed"
-
-- Double-check username and password in Garmin Connect settings
-- Verify Flatnotes is configured with `FLATNOTES_AUTH_TYPE=password`
-- Try logging into Flatnotes web interface with same credentials
-
-### Notes Not Appearing
-
-- Ensure notes exist in your Flatnotes `/data` directory
-- Check that note files have `.md` extension
-- Verify Flatnotes container has read permissions on the notes directory
-
-### Large Notes Fail to Load
-
-WristDown has memory constraints typical of embedded devices. Very large notes may:
-- Take longer to process
-- Display a warning if memory usage is high
-- Fail to load if they exceed available memory
-
-Consider breaking very long notes into smaller ones.
-
-## Security Considerations
-
-- Always use HTTPS in production
-- Keep your Flatnotes instance updated
-- Use a strong password
-- Consider network-level restrictions (VPN, IP allowlisting) for additional security
+- Use HTTPS for all remote sources.
+- Prefer a dedicated GitHub token limited to your one notes repository.
+- Revoke the token if you stop using WristDown or lose the watch.
+- Don't put real secrets in notes you sync to a watch.

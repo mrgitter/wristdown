@@ -1,6 +1,6 @@
 # WristDown
 
-**Markdown notes on your Garmin watch** - Sync notes from your self-hosted [Flatnotes](https://github.com/dullage/flatnotes) server, view them with smooth scrolling, and toggle checkboxes right from your wrist.
+**Markdown notes, tasks, and reminders on your Garmin watch.** WristDown 2.0 syncs straight from a GitHub repository, so you can keep notes on your watch without running a server for them.
 
 <!-- Connect IQ Store Badge - Update URL after publishing -->
 [<img src="https://developer.garmin.com/static/available-badge-9e49ebfb7336ce47f8df66dfe45d28ae.svg" width="200">](https://apps.garmin.com/en-US/apps/7d7054d3-0907-4f3a-a39b-c135830bd6ba)
@@ -8,129 +8,161 @@
 ## Screenshots
 
 <p>
-<img src="screenshots/1.png" width="180">
-<img src="screenshots/2.png" width="180">
-<img src="screenshots/3.png" width="180">
-<img src="screenshots/4.png" width="180">
-<img src="screenshots/5.png" width="180">
-<img src="screenshots/6.png" width="180">
-<img src="screenshots/7.png" width="180">
+<img src="screenshots/v2-1.png" width="180">
+<img src="screenshots/v2-4.png" width="180">
+<img src="screenshots/v2-5.png" width="180">
+<img src="screenshots/v2-6.png" width="180">
+<img src="screenshots/v2-11.png" width="180">
 </p>
 
-## Features
+## Ways to use it
 
-- **Sync notes** from your self-hosted Flatnotes server with JWT authentication
-- **Quick notes** - enter up to 3 notes directly in Garmin Connect settings (no server needed)
-- **View markdown** with smooth pixel-based scrolling optimized for circular displays
-- **Toggle checkboxes** - tap to check/uncheck tasks, changes saved on watch (optionally sync back to server)
-- **Note filtering** - set a keyword filter to sync only specific notes (e.g., notes with "watch" in title)
-- **Multiple font sizes** - Medium, Small, or Tiny to fit more content
-- **Sort notes** by title or last modified date
-- **Demo mode** - works out of the box with demo.flatnotes.io (no configuration needed)
+### Notes from GitHub, no server
 
-## Supported Devices
+Point WristDown at any GitHub repository, branch, and folder. It pulls the Markdown files, processes them, and stores them on the watch, so reading works offline. Keep the watch folder small: around 10 notes works well, past 15 things get unreliable.
 
-Works on **50+ Garmin watches** including:
+The setup:
+
+1. Put `.md` notes in a GitHub repository.
+2. Create a GitHub token with repository contents access.
+3. In Garmin Connect, enter the repository as `owner/repo`, plus folder and branch if needed.
+4. Open WristDown and hit **Sync**.
+
+See the [GitHub setup guide](docs/github.md) for details. See the [settings guide](docs/settings.md) for watch options, Auto-Refresh, and working offline.
+
+### Obsidian tasks
+
+With GitHub as the source, WristDown understands a subset of the [Obsidian](https://obsidian.md/) Tasks checkbox format: tasks with a `📅` due date, plus recurrence and completion markers. I tested it with a vault synced through Git using the [Obsidian Git](https://community.obsidian.md/plugins/obsidian-git) and [Tasks](https://community.obsidian.md/plugins/obsidian-tasks-plugin) community plugins.
+
+```markdown
+- [ ] Water plants 🔁 every day 📅 2026-06-04
+- [ ] Review release notes 📅 2026-06-05
+- [x] Send invoice 📅 2026-06-01 ✅ 2026-06-01
+```
+
+On the watch, the emoji metadata is stripped from the note text, the tasks show up in the reminders view, and changes you make on the watch can sync back to the Markdown file.
+
+It's not the whole Tasks plugin, though. IDs, created dates, priorities, dependencies, query blocks, and the Dataview format aren't supported. The [Markdown reference](docs/markdown.md) lists exactly what is, including recurrence forms and event tags.
+
+> Note: when the Tasks plugin completes a recurring task, it keeps the completed line and adds a fresh one. WristDown keeps a single active line per recurring task and rewrites it in place, so the completed history is not preserved.
+
+### Self-hosted Flatnotes
+
+If you already run a [Flatnotes](https://github.com/dullage/flatnotes) server, that still works; it was the original sync source. It syncs your notes, and checkbox sync-back works too if you add a small reverse-proxy rewrite. See the [Flatnotes setup guide](docs/flatnotes.md).
+
+### Quick Notes
+
+If you just want a couple of notes with zero setup, type up to 3 notes directly into the Garmin Connect settings. No GitHub or Flatnotes needed; they show up at the top of the note list on the watch.
+
+## What's new in 2.0
+
+- **GitHub as a note source** - sync directly from GitHub, no self-hosting needed.
+- **Obsidian-style tasks** - due dates, completion markers, and recurring rules parsed from your Markdown.
+- **Reminders view** - overdue, due, and upcoming tasks and events from your GitHub notes, in one place.
+- **Reminder notifications** - optional Garmin notifications when a reminder comes due.
+- **GitHub sync-back** - checkbox and task changes are written back to GitHub, with SHA-based conflict protection.
+- **Frontmatter preservation** - your note frontmatter survives sync-back untouched.
+
+> The new timed tasks and event reminders work only with GitHub as the sync source; Flatnotes and Quick Notes are not supported for them. The reminders view, notifications, and glance summary also need a watch with enough memory; see [Reminders on older watches](#reminders-on-older-watches).
+
+Full details in the [WristDown 2.0 changelog](docs/changelog-v2.0.md).
+
+## Features by source
+
+| Feature | GitHub | Flatnotes | Quick Notes |
+|---|---|---|---|
+| No self-hosted server required | Yes | No | Yes |
+| Sync a note library | Yes, `.md` and `.txt` files | Yes | No, up to 3 manual notes |
+| Folder or branch selection | Yes | No | n/a |
+| Markdown display | Yes | Yes | Yes |
+| Interactive checkboxes | Yes | Yes | On-watch only |
+| Checkbox sync-back | Yes, with conflict checks | Checkbox-only, needs a PUT-to-PATCH proxy rewrite | No |
+| Obsidian Tasks emoji markers | Yes | No | No |
+| Recurring task write-back | Yes | No | No |
+| Reminders list | Yes | No | No |
+| Reminder notifications | Yes | No | No |
+| Server freshness/conflict protection | Yes, SHA based | No | n/a |
+| YAML frontmatter preservation | Yes | n/a | n/a |
+| Demo mode | No | Yes | n/a |
+
+> Some older watches don't get every reminder feature because of memory limits; see [Reminders on older watches](#reminders-on-older-watches).
+
+## Supported devices
+
+Works on 50+ Garmin watches including:
+
 - Fenix 6/7/8 series
 - Epix (Gen 2) / Epix Pro
 - Forerunner 165/255/265/955/965/970
 - Venu series
 - ...and more
 
-Requires **API Level 3.4.0+** and a phone with Garmin Connect Mobile.
+Requires API Level 3.4.0+ and a phone with Garmin Connect.
 
-## Quick Start
+### Reminders on older watches
 
-### Demo Mode (No Setup)
+A few older watches don't have enough memory for the full reminder system, so they get a reduced build. Rather than drop them, I kept everything that fits: note reading, GitHub and Flatnotes sync, Quick Notes, Markdown display, checkboxes, and the task/reminder dates shown inside notes.
 
-WristDown works out of the box! The default server URL points to demo.flatnotes.io, so you can:
+What the reduced build leaves out:
 
-1. Install WristDown from the Connect IQ Store
-2. Open the app on your watch
-3. Select **Sync** - sample notes will be downloaded from the Flatnotes demo server
+- The Reminders list
+- Reminder system notifications
+- Background processing of due reminders
+- The reminder summary in the glance (the basic note/task counts still show where the watch supports glances)
 
-To use your own server, simply change the server URL in Garmin Connect settings.
+Watches with the reduced build:
 
-### Quick Notes (No Server)
+| Family | Models |
+|---|---|
+| Fenix 6 Pro | Fenix 6 Pro, Fenix 6S Pro, Fenix 6X Pro |
+| Forerunner | Forerunner 945 LTE |
+| MARQ Gen 1 | Adventurer, Athlete, Aviator, Captain, Commander, Driver, Expedition, Golfer |
 
-You can enter up to 3 notes directly in the app settings - no server required:
+Everything newer (Fenix 7/8, Epix Gen 2/Pro, Forerunner 255/265/955/965/970, Venu 3/4, MARQ Gen 2, and so on) gets the full reminder list, notifications, background processing, and glance summary.
 
-1. Open **Garmin Connect** app on your phone
-2. Go to **Devices** → Your watch → **Activities & Apps** → **Apps**
-3. Find **WristDown** → **Settings**
-4. Enter your notes in the **Note 1**, **Note 2**, **Note 3** fields (supports markdown)
-5. Open WristDown on your watch - your notes appear at the top of the list
+## Markdown and task support
 
-Quick notes are stored only locally on the watch and appear before any synced notes.
+WristDown renders common Markdown with colors and simple watch-friendly styling. See the [Markdown reference](docs/markdown.md) for the supported syntax and task examples.
 
-### Use Your Own Server
+## PIN protection
 
-1. Set up a [Flatnotes](https://github.com/dullage/flatnotes) server
-2. In the Garmin Connect Mobile app, go to WristDown settings
-3. Enter your server URL, username, and password
-4. Open WristDown on your watch and select **Sync**
+You can protect individual notes with a 3-5 digit PIN, set in Garmin Connect under **Security → App PIN**.
 
-See the [setup guide](docs/setup.md) for detailed configuration including optional checkbox sync-back.
+> The PIN blocks opening the note in WristDown, but it does not encrypt the note content on the watch or in your sync source.
 
-## Server Requirements
+To protect a note, open its note options:
 
-WristDown connects to [Flatnotes](https://github.com/dullage/flatnotes), a self-hosted note-taking app. You'll need:
+- **Touchscreen:** swipe left while viewing the note
+- **Button watches:** hold MENU/UP while viewing the note
 
-- A running Flatnotes instance accessible over HTTPS
-- (Optional) A reverse proxy configured to rewrite PUT→PATCH for checkbox sync-back
-
-See the [detailed setup guide](docs/setup.md) for configuration instructions.
-
-## Markdown Support
-
-WristDown renders common markdown syntax using colors (Garmin watches don't support bold/italic fonts):
-
-| Syntax | Display |
-|--------|---------|
-| `**bold**` | Yellow text |
-| `*italic*` | Light gray text |
-| `# ## ###` | Headers with underline |
-| `` `code` `` | Cyan text |
-| `~~strike~~` | Dark gray text |
-| `[ ]` `[x]` | Interactive checkboxes |
-| `- item` | Bullet lists |
-| `---` | Horizontal line |
-
-See the [full markdown reference](docs/markdown.md) for details.
-
-## PIN Protection
-
-Protect individual notes with a 3-5 digit PIN configured in Garmin Connect app settings (Security → App PIN).
-
-**Accessing note options to toggle protection:**
-- **Touchscreen:** Swipe left while viewing a note
-- **Button watches:** Hold MENU button (UP on Fenix/Forerunner) while viewing a note
-
-Select "Protect with PIN" or "Remove Protection" from the menu.
-
-## Disabling Server Sync
-
-To use only Quick Notes without server sync, clear the Flatnotes URL in Garmin Connect app settings. On the next sync, previously synced server notes will be deleted and only your manual Quick Notes will remain.
-
-Useful if you tried the demo server and now want to use only Quick Notes.
-
-## Performance
-
-Notes are pre-rendered when downloaded. After that, notes of any size open and scroll instantly with no lag. The app supports longer notes (tested with ~5 A4-page texts), though initial processing takes longer for large notes.
+Then pick **Protect with PIN** or **Remove Protection**.
 
 ## Languages
 
-**App interface:** Available in English.
+The app interface is in English.
 
-**Note content:** Latin-based languages (English, French, German, Spanish, etc.) display correctly. Arabic and RTL languages are not supported. CJK languages have not been tested.
+For note content, Latin-based languages like English, French, German, and Spanish display fine. Arabic and other RTL languages are not supported. CJK languages weren't tested.
 
 ## Links
 
-- [Setup Guide](docs/setup.md) - Server configuration instructions
-- [Markdown Reference](docs/markdown.md) - Supported syntax
-- [Flatnotes](https://github.com/dullage/flatnotes) - The note server WristDown connects to
+- [Setup Guide](docs/setup.md)
+- [GitHub Setup Guide](docs/github.md)
+- [Flatnotes Setup Guide](docs/flatnotes.md)
+- [Settings Guide](docs/settings.md)
+- [Markdown Reference](docs/markdown.md)
+- [WristDown 2.0 Changelog](docs/changelog-v2.0.md)
+- [Obsidian](https://obsidian.md/)
+- [Obsidian Tasks community plugin](https://community.obsidian.md/plugins/obsidian-tasks-plugin)
+- [Obsidian Tasks user guide](https://publish.obsidian.md/tasks/)
+- [Obsidian Git community plugin](https://community.obsidian.md/plugins/obsidian-git)
+- [GitHub fine-grained token permissions](https://docs.github.com/rest/overview/permissions-required-for-fine-grained-personal-access-tokens)
+- [Flatnotes](https://github.com/dullage/flatnotes)
 - [Connect IQ Store](https://apps.garmin.com/en-US/apps/7d7054d3-0907-4f3a-a39b-c135830bd6ba)
 
 ## Feedback
 
-Found a bug or have a feature request? Open an issue in this repository.
+Version 2.0 adds a lot of new features: GitHub sync, tasks, recurrence, notifications. It has been tested on physical Fenix 7 and Fenix 8 watches; other models were tested only in Garmin's simulator, so bugs are possible, especially around timed tasks, events, recurrence, notifications, and untested device models.
+
+If something looks wrong, please open an issue here with your watch model, an example note, your settings, and what happened. Feedback of any kind is welcome.
+
+I'd also recommend not relying on WristDown as your only reminder for anything critical (medication, appointments, flights) until 2.0 has been tested by more users.
