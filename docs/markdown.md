@@ -10,7 +10,7 @@ WristDown renders Markdown notes on Garmin watches. Watches don't do rich text f
 |---|---|
 | `**bold**` or `__bold__` | Yellow text |
 | `*italic*` or `_italic_` | Light gray text |
-| `**_bold italic_**` | Orange text |
+| `***bold italic***` | Orange text |
 | `# Header 1` | White text with underline |
 | `## Header 2` | Light gray text with underline |
 | `### Header 3` | Light gray text with underline |
