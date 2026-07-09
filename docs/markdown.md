@@ -16,8 +16,8 @@ WristDown renders Markdown notes on Garmin watches. Watches don't do rich text f
 | `### Header 3` | Light gray text with underline |
 | `` `code` `` | Cyan text |
 | `~~strikethrough~~` | Dark gray text |
-| `[ ]` | Checkbox, unchecked |
-| `[x]` or `[X]` | Checkbox, checked |
+| `- [ ] item` or `* [ ] item` | Checkbox, unchecked |
+| `- [x] item`, `- [X] item`, or star-list equivalents | Checkbox, checked |
 | `- item` | Bullet point |
 | `1. item` | Numbered list |
 | `---` | Horizontal line |
@@ -102,14 +102,14 @@ WristDown is compatible with the useful parts of the Tasks emoji format, but it 
 | Task source | Can query tasks across a vault. | Reads only the synced note files in your configured GitHub folder. |
 | Task format | Tasks emoji format or Dataview format. | Emoji-style markers only; no Dataview fields. |
 | Reminder anchor | Tracks undated tasks and several date fields. | Needs a `📅` due date to make a reminder. |
-| Statuses | Richer/custom statuses when configured. | `[ ]` is open, `[x]`/`[X]` is done. Anything else isn't an interactive task. |
+| Statuses | Richer/custom statuses when configured. | `- [ ]` is open, `- [x]`/`- [X]` is done. Anything else isn't an interactive task. |
 | Queries | Tasks query blocks. | No query blocks; task lines are parsed directly. |
 | Recurrence history | Completing a recurring task can leave a completed `✅` line and create a new open one. | One active recurrence line. Completing from the watch rewrites that line back to open, drops the `✅`, and advances the date. No history line is kept. |
 | Advanced fields | Priorities, IDs, dependencies, created dates, on-completion behavior, and more. | Ignored for reminder behavior. Unsupported markers after a supported one may be stripped from the watch display. |
 
 > If the completed-line history from the Tasks plugin matters to you, don't complete that recurring task from the watch, or keep the history outside the watch note. WristDown is meant for a small, current watch task list, not a full vault task database.
 
-Not interpreted: task IDs (`🆔`), created dates (`➕`), priorities, dependencies, blocking relationships, custom statuses beyond `[ ]` and `[x]`, query blocks, the Dataview format, and recurrence phrases outside the grammar below. Unsupported markers stay visible if no supported marker comes before them; after a supported marker they may be hidden along with the stripped metadata, but either way they don't affect behavior.
+Not interpreted: task IDs (`🆔`), created dates (`➕`), priorities, dependencies, blocking relationships, custom checkbox statuses beyond `- [ ]`, `- [x]`, and `- [X]`, query blocks, the Dataview format, and recurrence phrases outside the grammar below. Unsupported markers stay visible if no supported marker comes before them; after a supported marker they may be hidden along with the stripped metadata, but either way they don't affect behavior.
 
 ## Dates and times
 
