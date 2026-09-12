@@ -91,7 +91,7 @@ Full details in the [WristDown 2.0 changelog](docs/changelog-v2.0.md).
 
 Works on 50+ Garmin watches including:
 
-- Fenix 6/7/8 series
+- Fenix 6/7/8/9 series
 - Epix (Gen 2) / Epix Pro
 - Forerunner 165/255/265/955/965/970
 - Venu series
