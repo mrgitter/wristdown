@@ -1,6 +1,6 @@
 # Markdown Reference
 
-WristDown renders Markdown notes on Garmin watches. Watches don't do rich text fonts the way a desktop app does, so formatting is shown with colors and simple watch-friendly styles instead.
+WristDown renders Markdown notes on Garmin watches. Watches don't do rich text fonts the way a desktop app does, so formatting is shown with colors and simple watch-friendly styles. Bold and italic text is always colored, and on watches that can draw them it also uses real bold and italic letters.
 
 > The task and event reminders described below (Obsidian Tasks subset, dates, recurrence, event tags) work only with GitHub as the sync source.
 
@@ -8,9 +8,9 @@ WristDown renders Markdown notes on Garmin watches. Watches don't do rich text f
 
 | Syntax | How it shows up |
 |---|---|
-| `**bold**` or `__bold__` | Yellow text |
-| `*italic*` or `_italic_` | Light gray text |
-| `***bold italic***` | Orange text |
+| `**bold**` or `__bold__` | Yellow text, in bold letters on watches that can draw them |
+| `*italic*` or `_italic_` | Light gray text, in italic letters on watches that can draw them |
+| `***bold italic***` | Orange text, in bold letters on watches that can draw them |
 | `# Header 1` | White text with underline |
 | `## Header 2` | Light gray text with underline |
 | `### Header 3` | Light gray text with underline |
@@ -21,6 +21,7 @@ WristDown renders Markdown notes on Garmin watches. Watches don't do rich text f
 | `- item` | Bullet point |
 | `1. item` | Numbered list |
 | `---` | Horizontal line |
+| `[text](https://...)` or `<https://...>` | Blue link you can open on your phone |
 
 How it looks on the watch:
 
@@ -57,7 +58,7 @@ For GitHub notes, checkbox changes can sync back to the Markdown file. Flatnotes
 
 ## Obsidian Tasks subset
 
-WristDown 2.0 supports a small, watch-focused subset of the [Obsidian Tasks community plugin](https://community.obsidian.md/plugins/obsidian-tasks-plugin) syntax on checkbox lines. (The [Tasks user guide](https://publish.obsidian.md/tasks/) describes the full plugin.) The main rule: a task needs a `📅` due date to become a WristDown reminder. Markers can appear in any order, and the text shown on the watch is whatever comes before the first supported marker.
+WristDown supports a small, watch-focused subset of the [Obsidian Tasks community plugin](https://community.obsidian.md/plugins/obsidian-tasks-plugin) syntax on checkbox lines. (The [Tasks user guide](https://publish.obsidian.md/tasks/) describes the full plugin.) The main rule: a task needs a `📅` due date to become a WristDown reminder. Markers can appear in any order, and the text shown on the watch is whatever comes before the first supported marker.
 
 Supported task line prefixes:
 
@@ -145,10 +146,10 @@ Supported forms:
 | `every week` or `every weeks` | Every week |
 | `every month` or `every months` | Every month |
 | `every year` or `every years` | Every year |
-| `every N days` | Every N days, where `N` is 1 or greater |
-| `every N weeks` | Every N weeks, where `N` is 1 or greater |
-| `every N months` | Every N months, where `N` is 1 or greater |
-| `every N years` | Every N years, where `N` is 1 or greater |
+| `every N days` | Every N days, where `N` is 1 to 1000 |
+| `every N weeks` | Every N weeks, where `N` is 1 to 520 |
+| `every N months` | Every N months, where `N` is 1 to 120 |
+| `every N years` | Every N years, where `N` is 1 to 12 |
 | any of the above plus `when done` | For tasks, repeat from the completion date |
 
 Whitespace and letter case don't matter: `Every   2   Weeks When Done` is read as `every 2 weeks when done`. The unit can be singular or plural, so `every 2 week` works too.
@@ -161,9 +162,33 @@ Example recurring tasks:
 - [ ] Renew license 🔁 annually 📅 2026-06-10
 ```
 
+### Days of the week (tasks only)
+
+`🔁` task rules can also name days of the week, as Obsidian Tasks writes them:
+
+| Syntax | Meaning |
+|---|---|
+| `every weekday` | Monday to Friday |
+| `every Monday`, `every Monday and Friday`, `every Tue, Thu` | Those days every week |
+| `every week on Tuesday, Friday` | Those days every week |
+| `every N weeks on Friday`, `every 2 weeks on weekdays` | Those days every N weeks, where `N` is 1 to 520 |
+| any of the above plus `when done` | Next matching day after the completion date |
+
+Days can be joined with commas, `and` or `or`, and written in full (`Monday`, `Mondays`) or shortened (`Mon`, `Tues`, `Thurs`). With `every N weeks`, weeks start on Monday and are counted from the week of the `📅` date, as in Obsidian Tasks. The `📅` date itself counts as an occurrence even if it falls on another day.
+
+```markdown
+- [ ] Standup 🔁 every weekday 📅 2026-10-02
+- [ ] Gym 🔁 every Monday and Friday 📅 2026-09-28
+- [ ] Review 🔁 every 2 weeks on Tuesday, Thursday 📅 2026-10-01
+```
+
+These rules work on `🔁` tasks only; on an event, `@repeat(every Monday)` is not a repeat.
+
 With GitHub sync-back, completing a recurring task rewrites the same line back to unchecked, removes any `✅` marker, and advances the `📅` date to the next occurrence. Normally the next occurrence is calculated from the existing due date; with `when done`, from the completion date.
 
-Not supported: weekday-specific rules, monthly rules like "the first Monday", calendar-date phrases, natural-language rules outside the forms above, and Tasks recurrence features that need fields other than `📅`.
+Not supported: monthly rules like "the first Monday" or "on the 1st", calendar-date phrases, natural-language rules outside the forms above (including text after the rule, such as a `#tag`), and Tasks recurrence features that need fields other than `📅`. A task whose `🔁` rule isn't supported is read-only on the watch: its checkbox is shown blocked and the reminder detail shows `R!`, so completing it on the watch can't end the series. Complete it in Obsidian instead. The same applies to a `🔁` task without a `📅` due date (only `⏳` or `🛫`, or no date): it has no reminder on the watch, and its checkbox is read-only.
+
+Monthly and yearly rules keep the day of month: a monthly date on the 31st falls on the last day of shorter months and returns to the 31st afterwards, and a yearly Feb 29 falls on Feb 28 outside leap years. When the watch advances a recurring task, it always writes the date with its year.
 
 ## WristDown event tags
 
@@ -208,6 +233,8 @@ Supported `@remind(...)` offsets:
 | `@remind(2h)` | 2 hours before |
 | `@remind(30m)` | 30 minutes before |
 
+On a repeating event, a lead of one repeat period or more is ignored and the event notifies only at its time: for example `@remind(1d)` or longer on a daily event, `@remind(7d)` or longer on a weekly one, `@remind(28d)` or longer on a monthly one, and `@remind(365d)` or longer on a yearly one.
+
 Events appear in the reminders view and can trigger notifications, but they're always non-interactive.
 
 ## Headers
@@ -231,7 +258,7 @@ This is **bold** and *italic* text with `code`.
 Bold italic shows up orange:
 
 ```markdown
-**_Important_**
+***Important***
 ```
 
 ## Emojis
@@ -297,12 +324,26 @@ First section
 Second section
 ```
 
+## Links
+
+Web links show up in blue:
+
+```markdown
+Read the [setup guide](https://github.com/mrgitter/wristdown) first.
+Or paste it as <https://github.com/mrgitter/wristdown>.
+```
+
+Scroll to a link as you would to a checkbox: it moves to the middle of the screen and gets an underline. Press START (or tap it on a touch watch), confirm, and Garmin Connect shows a notification on your phone that opens the page. The phone has to be connected over Bluetooth; otherwise the watch says so and nothing is sent.
+
+- Only `http://` and `https://` links can be opened. Other links (`obsidian://`, `mailto:`, links to other notes) show their text only.
+- Bare URLs without `<...>` or `[text](...)` stay plain text.
+- A note can have up to 32 links, each up to 512 characters; beyond that the text shows without a link.
+
 ## Unsupported syntax
 
 These aren't rendered as rich content:
 
-- Links `[text](url)` - shown as plain text
-- Images `![alt](url)` - not shown
+- Images `![alt](url)` - only the alt text is shown
 - Block quotes `> quote` - shown as plain text
 - Fenced code blocks - shown as plain text
 - Tables - shown as plain text
@@ -314,4 +355,4 @@ These aren't rendered as rich content:
 2. Use task lines for things you actually want to act on from the watch.
 3. Give watch notes their own GitHub folder.
 4. Keep that folder to about 10 notes, 15 at most.
-5. Keep individual files under 15 KB.
+5. Keep each note under 15,000 characters (10,000 on Forerunner 255/255S) to see all of it on the watch; a longer note shows its first part and is read-only. Files of 30 KB or more are skipped.

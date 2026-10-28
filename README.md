@@ -1,18 +1,19 @@
 # WristDown
 
-**Markdown notes, tasks, and reminders on your Garmin watch.** WristDown 2.0 syncs straight from a GitHub repository, so you can keep notes on your watch without running a server for them.
+**Markdown notes, tasks, and reminders on your Garmin watch.** WristDown syncs straight from a GitHub repository, so you can keep notes on your watch without running a server for them.
 
-<!-- Connect IQ Store Badge - Update URL after publishing -->
 [<img src="https://developer.garmin.com/static/available-badge-9e49ebfb7336ce47f8df66dfe45d28ae.svg" width="200">](https://apps.garmin.com/en-US/apps/7d7054d3-0907-4f3a-a39b-c135830bd6ba)
+
+<img src="assets/hero-2.1.png" alt="WristDown 2.1: Markdown files next to how the watch shows them">
 
 ## Screenshots
 
 <p>
-<img src="screenshots/v2-1.png" width="180">
-<img src="screenshots/v2-4.png" width="180">
-<img src="screenshots/v2-5.png" width="180">
-<img src="screenshots/v2-6.png" width="180">
-<img src="screenshots/v2-11.png" width="180">
+<img src="screenshots/v2.1-1.png" width="180" alt="Main menu with reminder counts and notes">
+<img src="screenshots/v2.1-2.png" width="180" alt="Markdown note with bold and italic text">
+<img src="screenshots/v2.1-3.png" width="180" alt="Grocery checklist">
+<img src="screenshots/v2.1-4.png" width="180" alt="Reminders screen">
+<img src="screenshots/v2.1-5.png" width="180" alt="Event countdown">
 </p>
 
 ## Ways to use it
@@ -54,18 +55,19 @@ If you already run a [Flatnotes](https://github.com/dullage/flatnotes) server, t
 
 If you just want a couple of notes with zero setup, type up to 3 notes directly into the Garmin Connect settings. No GitHub or Flatnotes needed; they show up at the top of the note list on the watch.
 
-## What's new in 2.0
+## What's new in 2.1
 
-- **GitHub as a note source** - sync directly from GitHub, no self-hosting needed.
-- **Obsidian-style tasks** - due dates, completion markers, and recurring rules parsed from your Markdown.
-- **Reminders view** - overdue, due, and upcoming tasks and events from your GitHub notes, in one place.
-- **Reminder notifications** - optional Garmin notifications when a reminder comes due.
-- **GitHub sync-back** - checkbox and task changes are written back to GitHub, with SHA-based conflict protection.
-- **Frontmatter preservation** - your note frontmatter survives sync-back untouched.
+- **Bold and italic letters** - on watches that can draw them, bold and italic text uses real bold and italic letters as well as its color.
+- **Links** - web links in notes show in blue; select one to open it on your phone.
+- **Bookmarks** - notes can reopen where you stopped reading.
+- **Long notes** - up to 15,000 characters per note; see [Long notes](#long-notes).
+- **Redesigned Reminders screen** - category totals at a glance and a preview of the next reminder, plus weekday repeat rules such as `🔁 every weekday`.
+- **Welcome note** - setup steps on first start, and tips and links in About.
+- **Faster GitHub sync** and many reliability fixes.
 
-> The new timed tasks and event reminders work only with GitHub as the sync source; Flatnotes and Quick Notes are not supported for them. The reminders view, notifications, and glance summary also need a watch with enough memory; see [Reminders on older watches](#reminders-on-older-watches).
+> Timed tasks and event reminders work only with GitHub as the sync source; Flatnotes and Quick Notes are not supported for them. The reminders view, notifications, and glance summary also need a watch with enough memory; see [Reminders on older watches](#reminders-on-older-watches).
 
-Full details in the [WristDown 2.0 changelog](docs/changelog-v2.0.md).
+Full details in the [WristDown 2.1 changelog](docs/changelog-v2.1.md). For GitHub sync, Obsidian-style tasks, reminders and notifications, added in 2.0, see the [WristDown 2.0 changelog](docs/changelog-v2.0.md).
 
 ## Features by source
 
@@ -83,19 +85,19 @@ Full details in the [WristDown 2.0 changelog](docs/changelog-v2.0.md).
 | Reminder notifications | Yes | No | No |
 | Server freshness/conflict protection | Yes, SHA based | No | n/a |
 | YAML frontmatter preservation | Yes | n/a | n/a |
-| Demo mode | No | Yes | n/a |
 
 > Some older watches don't get every reminder feature because of memory limits; see [Reminders on older watches](#reminders-on-older-watches).
 
 ## Supported devices
 
-Works on 50+ Garmin watches including:
+Works on 66 Garmin device targets, including:
 
-- Fenix 6/7/8/9 series
+- Fenix 6 Pro / 6S Pro / 6X Pro, Fenix 7, Fenix 8, Fenix 9 (including Fenix 9 Pro and Pro Solar), Fenix E
 - Epix (Gen 2) / Epix Pro
-- Forerunner 165/255/265/955/965/970
-- Venu series
-- ...and more
+- Forerunner 165/255/265/570/945 LTE/955/965/970
+- Venu 3/3S and Venu 4
+- vívoactive 5 and vívoactive 6
+- Enduro 3, Instinct 3 AMOLED, D2 Mach, Descent G2 and Mk3, MARQ Gen 1 and Gen 2
 
 Requires API Level 3.4.0+ and a phone with Garmin Connect.
 
@@ -118,11 +120,17 @@ Watches with the reduced build:
 | Forerunner | Forerunner 945 LTE |
 | MARQ Gen 1 | Adventurer, Athlete, Aviator, Captain, Commander, Driver, Expedition, Golfer |
 
-Everything newer (Fenix 7/8, Epix Gen 2/Pro, Forerunner 255/265/955/965/970, Venu 3/4, MARQ Gen 2, and so on) gets the full reminder list, notifications, background processing, and glance summary.
+Everything newer (Fenix 7/8/9, Epix Gen 2/Pro, Forerunner 255/265/955/965/970, Venu 3/4, MARQ Gen 2, and so on) gets the full reminder list, notifications, background processing, and glance summary.
 
 ## Markdown and task support
 
-WristDown renders common Markdown with colors and simple watch-friendly styling. See the [Markdown reference](docs/markdown.md) for the supported syntax and task examples.
+WristDown renders common Markdown with colors and simple watch-friendly styling; bold and italic text is colored, with real bold and italic letters on watches that can draw them. See the [Markdown reference](docs/markdown.md) for the supported syntax and task examples.
+
+## Long notes
+
+A note shows up to 15,000 characters on the watch, about five pages of text. On Forerunner 255 and 255S the limit is 10,000 characters.
+
+A longer note shows its first part, ends with a line saying it was shortened, and is read-only on the watch: its tasks can't be checked there. Split it into smaller notes to use all of it on the watch. Notes of 30 KB or more are skipped.
 
 ## PIN protection
 
@@ -150,6 +158,7 @@ For note content, Latin-based languages like English, French, German, and Spanis
 - [Flatnotes Setup Guide](docs/flatnotes.md)
 - [Settings Guide](docs/settings.md)
 - [Markdown Reference](docs/markdown.md)
+- [WristDown 2.1 Changelog](docs/changelog-v2.1.md)
 - [WristDown 2.0 Changelog](docs/changelog-v2.0.md)
 - [Obsidian](https://obsidian.md/)
 - [Obsidian Tasks community plugin](https://community.obsidian.md/plugins/obsidian-tasks-plugin)
@@ -161,8 +170,8 @@ For note content, Latin-based languages like English, French, German, and Spanis
 
 ## Feedback
 
-Version 2.0 adds a lot of new features: GitHub sync, tasks, recurrence, notifications. It has been tested on physical Fenix 7 and Fenix 8 watches; other models were tested only in Garmin's simulator, so bugs are possible, especially around timed tasks, events, recurrence, notifications, and untested device models.
+Version 2.1 adds bold and italic letters, links, bookmarks, long notes and a redesigned Reminders screen, on top of 2.0's GitHub sync, tasks, recurrence and notifications. It has been tested on physical Fenix 7 and Fenix 8 watches; other models were tested only in Garmin's simulator, so bugs are possible, especially around timed tasks, events, recurrence, notifications, and untested device models.
 
 If something looks wrong, please open an issue here with your watch model, an example note, your settings, and what happened. Feedback of any kind is welcome.
 
-I'd also recommend not relying on WristDown as your only reminder for anything critical (medication, appointments, flights) until 2.0 has been tested by more users.
+I'd also recommend not relying on WristDown as your only reminder for anything critical (medication, appointments, flights) until it has been tested by more users.

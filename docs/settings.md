@@ -27,6 +27,7 @@ With it off, your watch changes are still saved locally; they're uploaded the ne
 | **Font Size** | Note text size: Medium, Small, or Tiny. |
 | **Sort** | Sort synced notes by **Last Modified** or **Title**. Quick Notes stay at the top. |
 | **Scrollbar** | The note scroll indicator: Off, Always, or only for Long Notes. |
+| **Bookmarks** | Reopen notes where you stopped reading: Off (default), Long Notes (three screens or more), or All Notes. Each note can override this under Note options. |
 
 ### Reminders
 
@@ -42,7 +43,7 @@ Reminder notifications work from data already stored on the watch, so they keep 
 
 ### About
 
-Shows the built-in WristDown info note.
+Shows the built-in WristDown note: tips for using the app on the watch, and links to these docs, bug reports and the store page. Until you set up GitHub, Flatnotes or a Quick Note, it is the Welcome note instead, with setup steps and a daily reminder to set up sync (in the Reminders list, on watches with full reminder support).
 
 ## Note options
 
@@ -52,6 +53,8 @@ While viewing a note:
 - **Button watches:** hold MENU/UP.
 
 From there you can choose **Protect with PIN** or **Remove Protection**. Set the PIN first in Garmin Connect.
+
+**Bookmark** turns reading-position memory on or off for this note, whatever the global **Bookmarks** setting says. When it's on, the note reopens where you left it. If the note's layout changed since then (a new font size, or an edit from sync), it opens at about the same place in the note.
 
 ## Garmin Connect settings
 

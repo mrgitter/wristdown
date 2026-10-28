@@ -1,6 +1,6 @@
 # GitHub Setup
 
-GitHub is the recommended note source for WristDown 2.0. It works well with a small notes repository, a folder inside a bigger repository, or an Obsidian vault synced with Git.
+GitHub is the recommended note source for WristDown. It works well with a small notes repository, a folder inside a bigger repository, or an Obsidian vault synced with Git.
 
 > Keep the folder you point WristDown at small: about 10 notes, 15 at most. The initial folder listing can get too large for the watch when there are many files in it, even if each file is tiny.
 
@@ -165,7 +165,7 @@ A small dedicated folder is more reliable than a filter on a big one, because th
 
 - Use `.md` or `.txt` files.
 - Put files directly in the configured folder; nested folders are skipped.
-- Keep individual files under 15 KB.
+- Files of 30 KB or more are skipped. A note shows in full up to 15,000 characters (10,000 on Forerunner 255/255S); a longer one shows its first part and is read-only on the watch.
 - Keep the folder small. Too many files can make the initial sync payload fail before any notes are processed.
 - Check whether the **Note Keyword Filter** is excluding them.
 

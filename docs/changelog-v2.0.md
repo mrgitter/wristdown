@@ -1,6 +1,19 @@
 # WristDown 2.0 Changelog
 
-## New features
+For what changed after 2.0, see the [WristDown 2.1 changelog](changelog-v2.1.md).
+
+## 2.0.1
+
+- Added support for the fēnix 9 series (fēnix 9, 9 Pro and 9 Pro Solar).
+- Fixed checkboxes and list items indented with spaces.
+- Fixed bold italic text written with mixed markers (such as `**_text_**`) and underscores inside words.
+- Fixed notes with uppercase file extensions (such as `.MD`) not syncing from GitHub.
+- Fixed a crash syncing long notes on Fenix 6 Pro family, Forerunner 945 LTE and MARQ Gen 1 watches.
+- Existing notes receive the formatting fixes automatically after updating.
+
+## 2.0.0
+
+### New features
 
 - **GitHub note source** - sync Markdown and text notes from a GitHub repository, branch, and folder.
 - **GitHub sync-back** - checkbox and task changes made on the watch are uploaded back to GitHub.
@@ -15,7 +28,7 @@
 - **Scrollbar option** - scroll indicator shown always, only for long notes, or never.
 - **Reminder options** - reminder menu position, empty-state visibility, and notification behavior.
 
-## User interface
+### User interface
 
 - Main menu reminder item shows reminder counts and urgency.
 - New reminder detail screen: one reminder per screen, due labels, navigation to the source note.
@@ -26,14 +39,14 @@
 - Options menu grouped into Sync, Notes, Reminders, and About.
 - Important sync errors stay on screen longer.
 
-## Performance and reliability
+### Performance and reliability
 
 - Replaced the built-in scroll animation with a custom timer-based one: smoother, no skipped frames, scales with scroll distance.
 - Added flick momentum to touch scrolling; button scroll steps adjusted to screen size.
 - Reduced release build size to lower memory pressure on older watches.
 - Reduced reminder build for Fenix 6 Pro family, Forerunner 945 LTE, and MARQ Gen 1: notes, sync, Markdown display, checkboxes, and in-note task/reminder dates are kept; the reminder list, reminder options, notifications, background processing, and glance summary are omitted.
 
-## Bug fixes
+### Bug fixes
 
 - Fixed an out-of-memory crash risk during rapid note scrolling.
 - Fixed inconsistent dimming color for disabled/secondary note text.
